@@ -51,7 +51,48 @@ skan, 3d, laser, laser plane, structured light
 
 \section{Wstęp}
 
-\todo{Opisać zasadę działania}
+Podstawa działania programu opiera się o równania pozwalające wyznaczyć położenie punktu w przestrzeni leżącego na znanej płaszczyźnie na podstawie położenia na obrazie z kamery.
+$\underline{X}={P_k^+}\underline{x}+\lambda 
+\begin{bmatrix}
+    0\\
+    0\\
+	0\\
+    1
+\end{bmatrix}$\\
+$\underline{p^T}({P_k^+}\underline{x}+\lambda*\underline{C})=0$
+\\
+przy czym:
+\\
+$\underline{X}$ - współrzędne punktu w przestrzeni\\
+$P_k=
+\begin{bmatrix}
+    fx&0&cx\\
+    0&fy&cy\\
+	0&0&1\\
+\end{bmatrix}\cdot
+\begin{bmatrix}
+    1&0&cx&0\\
+    0&1&cy&0\\
+	0&0&1&0\\
+\end{bmatrix}$ - macierz parametrów kamery\\
+${P_k^+}$ - pseudo odwrotna macierz kamery\\
+$\underline{x}$ - współrzędne punktu na obrazie\\
+$\underline{C}=
+\begin{bmatrix}
+    0\\
+    0\\
+	0\\
+    1
+\end{bmatrix}$ - współrzędne kamery\\
+$\underline{p}^t = 
+\begin{bmatrix}
+    n_x\\
+    n_y\\
+	n_z\\
+    -d
+\end{bmatrix}$ - wektor płaszczyzny
+
+Na podstawie 2 równania wyznaczana jest $\lambda$ a następnie wykorzystując pierwsze równanie położenie punktu w przestrzeni 3D.
 
 \section{Mechanika}
 
@@ -83,74 +124,23 @@ Do działania algorytmu niezbędne są informacje z kalibracji kamery zawierają
 
 Po uruchomieniu program sprawdza czy istnieje plik z danymi o kalibracji kamery. Jeżeli nie to uruchamia procedurę kalibracji. 
 
-Kalibracja wymaga szachownicy kalibracyjnej, której wymiary są zdefiniowane w zmiennych "checkerboard_size_x" oraz "checkerboard_size_x". W trakcie kalibracji należy pobrać odpowiednią liczbę obrazów (zdefiniowaną przez "camera_calib_img_count") zawierających tablicę kalibracyjną w różnych obszarach widzenia kamery. Pobieranie następuje poprzez wciśnięcie dowolnego klawisza. Po pobraniu obrazów następuje proces kalibracji z wykorzystanie funkcji dostępnej w OpenCV "calibrateCamera". W zależności od ilości pobranych klatek proces ten może trwać od kilku minut wzwyż. Po wyznaczeniu parametrów kamery następuje zapis do pliku "cam_param.yml".
+Kalibracja wymaga szachownicy kalibracyjnej, której wymiary są zdefiniowane w zmiennych $"checkerboard\_size\_x"$ oraz $"checkerboard\_size\_x"$. W trakcie kalibracji należy pobrać odpowiednią liczbę obrazów (zdefiniowaną przez $"camera\_calib\_img\_count"$) zawierających tablicę kalibracyjną w różnych obszarach widzenia kamery. Pobieranie następuje poprzez wciśnięcie dowolnego klawisza. Po pobraniu obrazów następuje proces kalibracji z wykorzystanie funkcji dostępnej w OpenCV $"calibrateCamera"$. W zależności od ilości pobranych klatek proces ten może trwać od kilku minut wzwyż. Po wyznaczeniu parametrów kamery następuje zapis do pliku $"cam_param.yml"$.
 
 \subsection{Wyznaczenie płaszczyzny lasera}
 
+W przypadku gdy wczytane zostały parametry kamery sprawdzane jest czy istnieje plik zawierający informacje o położeniu płaszczyzny lasera $"PlaneEq.yml"$.
 
+Kalibracja płaszczyzny lasera wymaga szachownicy kalibracyjnej znajdującej się na płaszczyźnie ale nie zajmującej całego obszaru widzianego przez kamerę. Wynika to z tego, iż gdy szachownica oświetlona jest laserem, to nie jest ona rozpoznawana przez algorytm.
+Po wciśnięciu klawisza 'p' następuje przechwycenie klatki. Na obrazie następuje wyszukanie szachownicy poprzez funkcję $"calculateCheckerboardVector"$, która to zwraca równanie płaszczyzny tablicy kalibracyjnej względem kamery. Oraz wyszukanie linii lasera $"find\_laser"$ w formie wektora punktów 2D. Następnie wykorzystując równanie płaszczyzny i punkty 2D obliczane jest położenie tych punktów w przestrzeni wykorzystując $"projectImagePointsOntoPlane"$ (funkcja działa na zasadzie opisanej we wstępie). Gdy zebrana jest chmura punktów, można dokonać dopasowania płaszczyzny funkcją $"best_plane_from_points"$. Gdy zebrana jest wystarczająca ilość punktów i dokładność płaszczyzny powinna być zadowalająca można zapisać plik z równaniem płaszczyzny lasera poprzez przytrzymanie klawisza 's'.
+Testowano po 4 krotnym zebraniu punktów i równanie płaszczyzny zostało wyznaczone względnie poprawnie (nie badano dokładności).
 
-\subsection{Figures and Tables}
-\paragraph{Positioning Figures and Tables} Place figures and tables at the top and 
-bottom of columns. Avoid placing them in the middle of columns. Large 
-figures and tables may span across both columns. Figure captions should be 
-below the figures; table heads should appear above the tables. Insert 
-figures and tables after they are cited in the text. Use the abbreviation 
-``Fig.~\ref{fig}'', even at the beginning of a sentence.
+\subsection{Skanowanie}
 
-\begin{table}[htbp]
-\caption{Table Type Styles}
-\begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{Table}&\multicolumn{3}{|c|}{\textbf{Table Column Head}} \\
-\cline{2-4} 
-\textbf{Head} & \textbf{\textit{Table column subhead}}& \textbf{\textit{Subhead}}& \textbf{\textit{Subhead}} \\
-\hline
-copy& More table copy$^{\mathrm{a}}$& &  \\
-\hline
-\multicolumn{4}{l}{$^{\mathrm{a}}$Sample of a Table footnote.}
-\end{tabular}
-\label{tab1}
-\end{center}
-\end{table}
+W przypadku gdy istnieją pliki kalibracyjne kamery oraz płaszczyzny program przechodzi do skanowania. Po wciśnięciu klawisza 'n' pobierany jest obraz, wyszukiwana jest linia lasera, obliczane jest położenie punktów lasera w przestrzeni oraz są one dodawane do chmury punktów. Tak uzyskaną chmurę można zapisać przy pomocy klawisza 's'.
 
-\begin{figure}[htbp]
-%\centerline{\includegraphics{fig1.png}}
-\caption{Example of a figure caption.}
-\label{fig}
-\end{figure}
+\subsection{projectImagePointsOntoPlane}
 
-Figure Labels: Use 8 point Times New Roman for Figure labels. Use words 
-rather than symbols or abbreviations when writing Figure axis labels to 
-avoid confusing the reader. As an example, write the quantity 
-``Magnetization'', or ``Magnetization, M'', not just ``M''. If including 
-units in the label, present them within parentheses. Do not label axes only 
-with units. In the example, write ``Magnetization (A/m)'' or ``Magnetization 
-\{A[m(1)]\}'', not just ``A/m''. Do not label axes with a ratio of 
-quantities and units. For example, write ``Temperature (K)'', not 
-``Temperature/K''.
-
-
-\section*{References}
-
-Please number citations consecutively within brackets \cite{b1}. The 
-sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
-number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
-the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
-
-Number footnotes separately in superscripts. Place the actual footnote at 
-the bottom of the column in which it was cited. Do not put footnotes in the 
-abstract or reference list. Use letters for table footnotes.
-
-Unless there are six authors or more give all authors' names; do not use 
-``et al.''. Papers that have not been published, even if they have been 
-submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
-that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
-Capitalize only the first word in a paper title, except for proper nouns and 
-element symbols.
-
-For papers published in translation journals, please give the English 
-citation first, followed by the original foreign-language citation \cite{b6}.
+Należy zaznaczyć, iż powyższa funkcja o którą opiera się cały program została dostarczona przez Jan Wietrzykowski.
 
 \begin{thebibliography}{00}
 \bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
