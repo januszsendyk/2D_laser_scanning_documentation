@@ -60,22 +60,32 @@ skan, 3d, laser, laser plane, structured light
 The IEEEtran class file is used to format your paper and style the text. All margins, 
 
 \section{Elektronika}
-Before you begin to format your paper, first write and save the content as a 
+Projekt wymagał niedużej ilości operacji związanych z elektroniką.
 
-\subsection{Abbreviations and Acronyms}\label{AA}
-Define abbreviations and acronyms the first time they are used in the text, 
+Jako zasilanie kamery postanowiono wykorzystać istniejący kabel Ethernet oraz fakt obsługiwania przez zastosowane urządzenie standardu PoE. Rozwiązanie to pozwala na uniknięcie dodatkowych przewodów zasilających do kamery.
 
+Do zasilenia lasera wykonano odłączany przewód z wyjściami bananowymi do zasilenia z zasilacza laboratoryjnego. Napięcia zasilania lasera wynosi 5V.
 
-\begin{equation}
-a+b=\gamma\label{eq}
-\end{equation}
+\section{Program - Visual}
 
-\section{Program}
+Program został napisany w środowisku VisualStudio 2017
 
 Program wykorzystuje biblioteki:
 \begin{itemize}
-\item OpenCV
+\item OpenCV v3.4.0
+\item Eigen v3.3.3
+\item Pylon v5.0
 \end{itemize}
+
+Do działania algorytmu niezbędne są informacje z kalibracji kamery zawierające macierz kamery oraz macierz deformacji, oraz równanie płaszczyzny lasera.
+
+\subsection{Kalibracja kamery}
+
+Po uruchomieniu program sprawdza czy istnieje plik z danymi o kalibracji kamery. Jeżeli nie to uruchamia procedurę kalibracji. 
+
+Kalibracja wymaga szachownicy kalibracyjnej, której wymiary są zdefiniowane w zmiennych "checkerboard_size_x" oraz "checkerboard_size_x". W trakcie kalibracji należy pobrać odpowiednią liczbę obrazów (zdefiniowaną przez "camera_calib_img_count") zawierających tablicę kalibracyjną w różnych obszarach widzenia kamery. Pobieranie następuje poprzez wciśnięcie dowolnego klawisza. Po pobraniu obrazów następuje proces kalibracji z wykorzystanie funkcji dostępnej w OpenCV "calibrateCamera". W zależności od ilości pobranych klatek proces ten może trwać od kilku minut wzwyż. Po wyznaczeniu parametrów kamery następuje zapis do pliku "cam_param.yml".
+
+\subsection{Wyznaczenie płaszczyzny lasera}
 
 
 
