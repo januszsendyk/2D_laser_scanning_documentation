@@ -154,7 +154,7 @@ Procedura kalibracji kamery rozpoczyna się od sprawdzenia czy w folderze projek
 
 Kalibracja wymaga szachownicy kalibracyjnej, której wymiary są zdefiniowane w zmiennych $"checkerboard\_size\_x"$ oraz $"checkerboard\_size\_y"$. 
 
-Do poprawnego wykonania kalibracji konieczne jest pobranie wcześniej zdefiniowanej (przez zmienną $"camera\_calib\_img\_count"$) liczby obrazów zawierających widok na tablicę kalibracyjną w różnych obszarach widzenia kamery (przy różnych przemieszczeniach obrazu lecz bez jego obracania). Pobieranie następuje poprzez wciśnięcie dowolnego klawisza. Po pobraniu obrazów następuje proces kalibracji z wykorzystanie funkcji dostępnej w OpenCV $"calibrateCamera"$. W zależności od liczby pobranych klatek oraz posiadanej mocy obliczeniowej proces ten może trwać co najmniej kilka minut. Po wyznaczeniu parametrów kamery następuje ich zapis do pliku $"cam\_param.yml"$.
+Do poprawnego wykonania kalibracji konieczne jest pobranie wcześniej zdefiniowanej (przez zmienną $"camera\_calib\_img\_count"$) liczby obrazów zawierających widok na tablicę kalibracyjną w różnych obszarach widzenia kamery (przy różnych przemieszczeniach obrazu lecz bez jego obracania). Pobieranie następuje poprzez wciśnięcie dowolnego klawisza. Po pobraniu obrazów następuje proces kalibracji z wykorzystaniem funkcji dostępnej w OpenCV $"calibrateCamera"$. W zależności od liczby pobranych klatek oraz posiadanej mocy obliczeniowej proces ten może trwać co najmniej kilka minut. Po wyznaczeniu parametrów kamery następuje ich zapis do pliku $"cam\_param.yml"$.
 
 \subsection{Wyznaczenie płaszczyzny lasera}
 
@@ -174,6 +174,10 @@ W przypadku, gdy istnieją pliki kalibracyjne kamery oraz płaszczyzny program p
 \subsection{projectImagePointsOntoPlane}
 
 Należy zaznaczyć, iż powyższa funkcja, na której opiera się cały program została dostarczona przez Jan Wietrzykowski.
+
+\subsection{Uwagi do procesu kalibracji oraz pomiaru}
+
+Przed przystąpieniem do kalibracji należy zwrócić uwagę na warunki oświetleniowe. Problem pojawiającym się często przy próbach kalibracji czy też już późniejszych pomiarach jest utrudnione działanie programu przy zbyt intensywnym oświetleniu (mimo wykorzystania przesłony). Dobre wyniki uzyskano przy wykorzystaniu oświetlenia sztucznego. Należy unikać rzucania cienia na tablicę kalibracyjną podczas kalibracji wzajemnej kamery i lasera. Przed przystąpieniem do konfigurowania modułu należy dostosować ostrość obrazu do badanego zakresu pomiarowego starając się uzyskać możliwie wyraźny obraz w całym zakresie.
 
 \begin{thebibliography}{00}
 \bibitem{b1}Pose Estimation, $https:\/\/docs.opencv.org\/3.3.0\/d7\/d53\/tutorial\_py\_pose.html$, 13.06.2018
