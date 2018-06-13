@@ -29,19 +29,13 @@ jaroslaw.madry@student.put.poznan.pl}
 \textit{Politechnika Poznańska}\\
 Poznań, Polska \\
 janusz.sendyk@put.poznan.pl}
-\and
-\IEEEauthorblockN{3\textsuperscript{rd} Given Name Surname}
-\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
-\textit{name of organization (of Aff.)}\\
-City, Country \\
-email address}
 
 }
 
 \maketitle
 
 \begin{abstract}
-Dokument opisuje projekt optycznego skanera 3D wykorzystującego oświetlenie strukturalne w postaci linii laserowej. Skaner ten przystosowany został do umieszczenia na ramieniu robota manipulacyjnego UR-5.
+Dokument opisuje projekt optycznego skanera 3D wykorzystującego oświetlenie strukturalne w postaci linii laserowej. Laser generuje oświetlenie wykorzystując długośc fali równą 635nm. Skaner ten przystosowany został do umieszczenia na ramieniu robota manipulacyjnego UR-5.
 
 \end{abstract}
 
@@ -51,7 +45,7 @@ skan, 3d, laser, laser plane, structured light
 
 \section{Wstęp}
 
-Podstawa działania programu opiera się o równania pozwalające wyznaczyć położenie punktu w przestrzeni leżącego na znanej płaszczyźnie na podstawie położenia na obrazie z kamery.
+Podstawa działania programu opiera się o równania pozwalające wyznaczyć położenie punktu w przestrzeni, który znajduje się na znanej płaszczyźnie na podstawie położenia względem obrazu z kamery.
 $\underline{X}={P_k^+}\underline{x}+\lambda 
 \begin{bmatrix}
     0\\
@@ -96,20 +90,54 @@ Na podstawie 2 równania wyznaczana jest $\lambda$ a następnie wykorzystując p
 
 \section{Mechanika}
 
-\subsection{Maintaining the Integrity of the Specifications}
+W ramach realizowanego projektu wykonano uchwyt mocujący kamerę oraz laser w wymaganej konfiguracji. Projekt stworzony został w środowisku Autodesk Inventor, natomiast zaprojektowane elementy zostały wydrukowane za pomocą drukarki 3D przy zastosowaniu materiału PLA.
 
-The IEEEtran class file is used to format your paper and style the text. All margins, 
+
+Podstawowymi założeniami projektu były:
+\begin{itemize}
+	\item zasięg tworzonego układu (20-60cm),
+	\item prostota oraz szybkość wykonania/modyfikacji,
+	\item dostosowanie uchwytu do ramienia tak, aby w jak najmniejszym stopniu ograniczał jego ruchy.
+\end{itemize}
+
+W niniejszym dokumencie zaprezentowane zostały 3 ujęcia modelu uchwytu w złożeniu z modelem robota (rys. \ref{fig:widok_robot_1}, \ref{fig:widok_robot_2} oraz \ref{fig:widok_robot_3}).
+
+\begin{figure}[ht!]
+	\includegraphics[width=0.45\textwidth]{figures/widok_robot_1.png}
+	\centering
+	\caption{Widok ogólny robota z uchwytem}
+	\label{fig:widok_robot_1}
+\end{figure}
+
+\begin{figure}[ht!]
+	\includegraphics[width=0.45\textwidth]{figures/widok_robot_2.png}
+	\centering
+	\caption{Widok uchwytu w pionowej płaszczyźnie przekroju}
+	\label{fig:widok_robot_2}
+\end{figure}
+
+\begin{figure}[ht!]
+	\includegraphics[width=0.45\textwidth]{figures/widok_robot_3.png}
+	\centering
+	\caption{Widok uchwytu w widoku izometrycznym}
+	\label{fig:widok_robot_3}
+\end{figure}
+
+Kąt nachylenia obu elementów jest symetryczny względem osi obrotu ostatniego członu ramienia i wynosi dla każdego elementu z osobna 25 stopni (względem osi). W celu modyfikacji (zmniejszenia lub bardziej prawdopodobnego zwiększenia) pola widzenia projektowanego układu konieczne jest przeprojektowanie wyłącznie dwóch elementów.
+
+Mimo, iż elementy mocujące kamerę i laser wykonane zostały z PLA to uzyskana sztywność konstrukcji omawianego uchwytu jest wystarczająca.
+
+Istotną kwestią do rozważenia w dalszych pracach nad projektem jest opracowanie rozwiązania uniemożliwiającego obrót lasera wokół własnej osi. Proponowanym rozwiązaniem, którego nie udało się zaimplementować jest wklejenie wewnątrz obudowy lasera (w podstawie) cienkiej taśmy dwustronnej, która będzie zapobiegać obrotowi lasera. To rozwiązanie należałoby wprowadzić jak najszybciej przy dalszych pracach, ponieważ zapobiegnie ono konieczności wielokrotnego kalibrowania układu kamera-laser po przypadkowym przemieszczeniu lasera, które w aktualnej postaci mocowania jest bardzo łatwo wywołać.
 
 \section{Elektronika}
-Projekt wymagał niedużej ilości operacji związanych z elektroniką.
 
-Jako zasilanie kamery postanowiono wykorzystać istniejący kabel Ethernet oraz fakt obsługiwania przez zastosowane urządzenie standardu PoE. Rozwiązanie to pozwala na uniknięcie dodatkowych przewodów zasilających do kamery.
+Jako zasilanie kamery postanowiono wykorzystać przewód Ethernet oraz fakt obsługiwania przez zastosowane urządzenie standardu PoE. Dzięki temu rozwiązaniu do zasilania oraz transmisji danych z kamery wykorzystywany jest tylko jeden przewód.
 
-Do zasilenia lasera wykonano odłączany przewód z wyjściami bananowymi do zasilenia z zasilacza laboratoryjnego. Napięcia zasilania lasera wynosi 5V.
+Zasilanie lasera zostało doprowadzone przez odłączany przewód z wyjściami bananowymi, które służą do zasilania układu z zasilacza laboratoryjnego. W podstawowej konfiguracji konieczne jest doprowadzenie napięcia zasilania lasera 5V oraz masy. Istnieje możliwość sterowania intensywnością oświetlenia generowanego przez laser aczkolwiek do tego zadania konieczne byłoby wykorzystanie układu umożliwiającego płynne regulowanie napięcia w zakresie 0-5V podawanego na jeden z czterech pinów (szczegóły w dokumentacji lasera).
 
 \section{Program - Visual}
 
-Program został napisany w środowisku VisualStudio 2017
+Program został napisany w środowisku VisualStudio 2017.
 
 Program wykorzystuje biblioteki:
 \begin{itemize}
@@ -118,29 +146,34 @@ Program wykorzystuje biblioteki:
 \item Pylon v5.0
 \end{itemize}
 
-Do działania algorytmu niezbędne są informacje z kalibracji kamery zawierające macierz kamery oraz macierz deformacji, oraz równanie płaszczyzny lasera.
+Do poprawnego działania algorytmu niezbędne są informacje uzyskane podczas kalibracji kamery zawierające macierz kamery, macierz deformacji oraz równanie płaszczyzny lasera.
 
 \subsection{Kalibracja kamery}
 
-Po uruchomieniu program sprawdza czy istnieje plik z danymi o kalibracji kamery. Jeżeli nie to uruchamia procedurę kalibracji. 
+Procedura kalibracji kamery rozpoczyna się od sprawdzenia czy w folderze projektu znajduje się plik z danymi o kalibracji kamery. W przypadku, gdy wspomniany plik nie istnieje program przystępuje do wykonania procedury kalibracji kamery.
 
-Kalibracja wymaga szachownicy kalibracyjnej, której wymiary są zdefiniowane w zmiennych $"checkerboard\_size\_x"$ oraz $"checkerboard\_size\_x"$. W trakcie kalibracji należy pobrać odpowiednią liczbę obrazów (zdefiniowaną przez $"camera\_calib\_img\_count"$) zawierających tablicę kalibracyjną w różnych obszarach widzenia kamery. Pobieranie następuje poprzez wciśnięcie dowolnego klawisza. Po pobraniu obrazów następuje proces kalibracji z wykorzystanie funkcji dostępnej w OpenCV $"calibrateCamera"$. W zależności od ilości pobranych klatek proces ten może trwać od kilku minut wzwyż. Po wyznaczeniu parametrów kamery następuje zapis do pliku $"cam_param.yml"$.
+Kalibracja wymaga szachownicy kalibracyjnej, której wymiary są zdefiniowane w zmiennych $"checkerboard\_size\_x"$ oraz $"checkerboard\_size\_y"$. 
+
+Do poprawnego wykonania kalibracji konieczne jest pobranie wcześniej zdefiniowanej (przez zmienną $"camera\_calib\_img\_count"$) liczby obrazów zawierających widok na tablicę kalibracyjną (przy różnych przemieszczeniach obrazu lecz bez jego obracania). Pobieranie następuje poprzez wciśnięcie dowolnego klawisza. Po pobraniu obrazów następuje proces kalibracji z wykorzystanie funkcji dostępnej w OpenCV $"calibrateCamera"$. W zależności od liczby pobranych klatek oraz posiadanej mocy obliczeniowej proces ten może trwać kilka minut. Po wyznaczeniu parametrów kamery następuje ich zapis do pliku $"cam\_param.yml"$.
 
 \subsection{Wyznaczenie płaszczyzny lasera}
 
-W przypadku gdy wczytane zostały parametry kamery sprawdzane jest czy istnieje plik zawierający informacje o położeniu płaszczyzny lasera $"PlaneEq.yml"$.
+W przypadku, gdy wczytane zostały parametry kamery sprawdzane jest czy istnieje plik zawierający informacje o położeniu płaszczyzny lasera $"PlaneEq.yml"$.
 
-Kalibracja płaszczyzny lasera wymaga szachownicy kalibracyjnej znajdującej się na płaszczyźnie ale nie zajmującej całego obszaru widzianego przez kamerę. Wynika to z tego, iż gdy szachownica oświetlona jest laserem, to nie jest ona rozpoznawana przez algorytm.
-Po wciśnięciu klawisza 'p' następuje przechwycenie klatki. Na obrazie następuje wyszukanie szachownicy poprzez funkcję $"calculateCheckerboardVector"$, która to zwraca równanie płaszczyzny tablicy kalibracyjnej względem kamery. Oraz wyszukanie linii lasera $"find\_laser"$ w formie wektora punktów 2D. Następnie wykorzystując równanie płaszczyzny i punkty 2D obliczane jest położenie tych punktów w przestrzeni wykorzystując $"projectImagePointsOntoPlane"$ (funkcja działa na zasadzie opisanej we wstępie). Gdy zebrana jest chmura punktów, można dokonać dopasowania płaszczyzny funkcją $"best_plane_from_points"$. Gdy zebrana jest wystarczająca ilość punktów i dokładność płaszczyzny powinna być zadowalająca można zapisać plik z równaniem płaszczyzny lasera poprzez przytrzymanie klawisza 's'.
+Kalibracja płaszczyzny lasera wymaga szachownicy kalibracyjnej znajdującej się na płaszczyźnie ale nie zajmującej całego obszaru widzianego przez kamerę. Istotne jest to, iż gdy szachownica oświetlona jest laserem, to nie jest rozpoznawana przez algorytm.
+
+Po wciśnięciu klawisza 'p' następuje przechwycenie klatki. Na obrazie następuje wyszukanie szachownicy poprzez funkcję $"calculateCheckerboardVector"$, która to zwraca równanie płaszczyzny tablicy kalibracyjnej względem kamery. Oraz wyszukanie linii lasera $"find\_laser"$ w formie wektora punktów 2D. Następnie wykorzystując równanie płaszczyzny i punkty 2D obliczane jest położenie tych punktów w przestrzeni wykorzystując $"projectImagePointsOntoPlane"$ (funkcja działa na zasadzie opisanej we wstępie). Gdy zebrana jest chmura punktów, można dokonać dopasowania płaszczyzny funkcją $"best\_plane\_from\_points"$. 
+
+Gdy zebrana jest wystarczająca ilość punktów i dokładność płaszczyzny będzie zadowalająca można zapisać plik z równaniem płaszczyzny lasera poprzez przytrzymanie klawisza 's'.
 Testowano po 4 krotnym zebraniu punktów i równanie płaszczyzny zostało wyznaczone względnie poprawnie (nie badano dokładności).
 
 \subsection{Skanowanie}
 
-W przypadku gdy istnieją pliki kalibracyjne kamery oraz płaszczyzny program przechodzi do skanowania. Po wciśnięciu klawisza 'n' pobierany jest obraz, wyszukiwana jest linia lasera, obliczane jest położenie punktów lasera w przestrzeni oraz są one dodawane do chmury punktów. Tak uzyskaną chmurę można zapisać przy pomocy klawisza 's'.
+W przypadku, gdy istnieją pliki kalibracyjne kamery oraz płaszczyzny program przechodzi do skanowania. Po wciśnięciu klawisza 'n' pobierany jest obraz, wyszukiwana jest linia lasera, obliczane jest położenie punktów lasera w przestrzeni oraz są one dodawane do chmury punktów. Tak uzyskaną chmurę można zapisać przy pomocy klawisza 's'.
 
 \subsection{projectImagePointsOntoPlane}
 
-Należy zaznaczyć, iż powyższa funkcja o którą opiera się cały program została dostarczona przez Jan Wietrzykowski.
+Należy zaznaczyć, iż powyższa funkcja, na której opiera się cały program została dostarczona przez Jan Wietrzykowski.
 
 \begin{thebibliography}{00}
 \bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
