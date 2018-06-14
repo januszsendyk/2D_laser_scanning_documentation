@@ -180,7 +180,39 @@ Należy zaznaczyć, iż powyższa funkcja, na której opiera się cały program 
 
 \subsection{Uwagi do procesu kalibracji oraz pomiaru}
 
-Przed przystąpieniem do kalibracji należy zwrócić uwagę na warunki oświetleniowe. Problem pojawiającym się często przy próbach kalibracji czy też już późniejszych pomiarach jest utrudnione działanie programu przy zbyt intensywnym oświetleniu (mimo wykorzystania przesłony). Dobre wyniki uzyskano przy wykorzystaniu oświetlenia sztucznego. Należy unikać rzucania cienia na tablicę kalibracyjną podczas kalibracji wzajemnej kamery i lasera. Przed przystąpieniem do konfigurowania modułu należy dostosować ostrość obrazu do badanego zakresu pomiarowego starając się uzyskać możliwie wyraźny obraz w całym zakresie.
+Przed przystąpieniem do kalibracji należy zwrócić uwagę na warunki oświetleniowe. Problem pojawiającym się często przy próbach kalibracji czy też już późniejszych pomiarach jest utrudnione działanie programu przy zbyt intensywnym oświetleniu (mimo wykorzystania przesłony). Dobre wyniki uzyskano przy wykorzystaniu oświetlenia sztucznego. Należy unikać rzucania cienia na tablicę kalibracyjną podczas kalibracji wzajemnej kamery i lasera. Przed przystąpieniem do konfigurowania modułu należy dostosować ostrość obrazu do badanego zakresu pomiarowego starając się uzyskać możliwie wyraźny obraz w całym zakresie. Podczas wykonywania pomiarów, w każdej klatce pobieranych jest kilkanaście tysięcy punktów pomiarowych (około 12-14 tyś). Wartość tą należałoby zmniejszyć zmniejszając szerokość pobranej wiązki po obróbce uzyskując dzięki temu krótszy czas przetwarzania.
+
+
+\subsection{Dokładność pomiaru}
+
+W celu weryfikacji poprawności uzyskiwanych wyników wykonano kilka czynność, których wynikiem były dwa pomiary odległości do podłoża. Jako ramie mocujące wykorzystano robota UR5, który jest docelowym robotem, na którym ten system ma operować. Oklejono dwukrotnie laser taśmą izolacyjną ograniczając tym samym znacząco możliwość jego obrotu podczas pracy/po dokonaniu kalibracji systemu. Przygotowany uchwyt pomiarowy został zamontowany na ramieniu robota (rys. \ref{fig:robot_uchwyt} oraz \ref{fig:robot_uchwyt2}) a następnie odpowiednio (na nowo) skalibrowany.
+
+\begin{figure}[ht!]
+	\includegraphics[width=0.45\textwidth]{figures/robot_uchwyt.jpg}
+	\centering
+	\caption{Uchwyt pomiarowy umieszczony na robocie z kamerą skierowaną prostopadle do podłoża - widok 1}
+	\label{fig:robot_uchwyt}
+\end{figure}
+
+\begin{figure}[ht!]
+	\includegraphics[width=0.45\textwidth]{figures/robot_uchwyt2.jpg}
+	\centering
+	\caption{Uchwyt pomiarowy umieszczony na robocie z kamerą skierowaną prostopadle do podłoża - widok 2}
+	\label{fig:robot_uchwyt2}
+\end{figure}
+
+\begin{figure}[ht!]
+	\includegraphics[width=0.45\textwidth]{figures/wysokosc_pomiar.png}
+	\centering
+	\caption{Wynik pomiaru wykonanego na dwóch różnych wysokościach}
+	\label{fig:wysokosc_pomiar}
+\end{figure}
+
+Z otrzymanych pomiarów wynika (na podstawie danych zwrotnych z systemu robota) badane przemieszczenie powinno być zbliżone do 68,78mm. Otrzymane dane uzyskane po przetworzeniu przez system wizyjny wykazały przemieszczenie 62,8mm (rys. \ref{fig:wysokosc_pomiar}). Niestety nie udało się ustalić z czego wynika rozbieżność uzyskanych pomiarów.
+
+Natomiast kierunek przybliżania oraz oddalania kamery jest zgodny z kierunkiem uzyskanych punktów. Im bliżej znajdowała się kamera od podłoża tym bliższą wartość uzyskiwano z systemu.
+
+\newpage
 
 \begin{thebibliography}{00}
 \bibitem{b1}Pose Estimation, \url{https://docs.opencv.org/3.3.0/d7/d53/tutorial_py_pose.html}, 13.06.2018,
